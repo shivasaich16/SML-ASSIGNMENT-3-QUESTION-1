@@ -1,4 +1,4 @@
-# SML-ASSIGNMENT-3-QUESTION-1
+# SML-ASSIGNMENT-3 1ST ANSWER CODE 1
 import pandas as pd
 
 # Assuming df is your DataFrame containing the California housing data
@@ -18,3 +18,73 @@ print(f"Latitude: Mean={latitude_mean}, Std={latitude_std}")
 print(f"Total Rooms: Mean={total_rooms_mean}, Std={total_rooms_std}")
 print(f"House Median Age: Mean={house_median_age_mean}, Std={house_median_age_std}")
 print(f"Total Bedrooms: Mean={total_bedrooms_mean}, Std={total_bedrooms_std}")
+
+#SML-ASSIGNMENT-3 2ND ANSWER CODE 2
+import numpy as np
+import pandas as pd
+
+# Load your California housing dataset
+# df = pd.read_csv('path_to_california_housing.csv')
+
+# Calculate mean and variance of the latitude
+latitude_mean = df['latitude'].mean()
+latitude_std = df['latitude'].std()
+latitude_variance = latitude_std ** 2
+n = len(df['latitude'])
+
+# Define the values for which to calculate log-likelihood
+values = [50, 75, 80]
+log_likelihoods = {}
+
+# Calculate log-likelihood for each value
+for value in values:
+    log_likelihood = (-n / 2) * np.log(2 * np.pi * latitude_variance) - (1 / (2 * latitude_variance)) * np.sum((df['latitude'] - value) ** 2)
+    log_likelihoods[value] = log_likelihood
+
+# Display results
+print("Log-Likelihood Values:")
+for value, ll in log_likelihoods.items():
+    print(f"Value: {value}, Log-Likelihood: {ll}")
+
+# Display maximum likelihood estimates
+print(f"Maximum Likelihood Estimates: Mean = {latitude_mean}, Std = {latitude_std}")
+
+#SML-ASSIGNMENT-3 3RD ANSWER CODE 3
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Load your California housing dataset
+# df = pd.read_csv('path_to_california_housing.csv')
+
+# Define the bins for density estimation
+bins = [5, 10, 15, 20]
+
+# Initialize a dictionary to store density estimates
+density_estimates = {}
+
+# Columns to analyze
+columns = ['latitude', 'total_rooms', 'house_median_age', 'total_bedrooms']
+
+# Calculate density for each column
+for column in columns:
+    # Calculate histogram
+    hist, bin_edges = np.histogram(df[column], bins=np.arange(0, df[column].max() + 1, 5), density=True)
+    
+    # Store density estimates
+    density_estimates[column] = hist
+
+    # Plotting the density estimates
+    plt.figure(figsize=(10, 6))
+    plt.bar(bin_edges[:-1], hist, width=np.diff(bin_edges), edgecolor='black', alpha=0.7)
+    plt.title(f'Density Estimate for {column}')
+    plt.xlabel(column)
+    plt.ylabel('Density')
+    plt.xticks(bin_edges)
+    plt.grid(axis='y')
+    plt.show()
+
+# Display density estimates
+for column, density in density_estimates.items():
+    print(f'Density Estimates for {column}:')
+    print(density)
